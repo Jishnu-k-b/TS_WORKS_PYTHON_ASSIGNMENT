@@ -1,0 +1,254 @@
+<html>
+
+    <head>
+
+        <title>Finance Data Loader</title>
+        <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: #ddf9d8;
+          font-family: Arial, sans-serif;
+        }
+
+        h1 {
+          text-align: center;
+          font-size: 32px;
+          font-weight: bold;
+          margin-bottom: 30px;
+        }
+
+        label {
+          font-size: 18px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          display: block;
+        }
+
+        ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        li {
+          margin-bottom: 10px;
+        }
+
+        .box {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #ffffff;
+          padding: 30px;
+          padding-top:300px;
+          border-radius: 10px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .box select {
+          background-color: #b3b3b3;
+          color: white;
+          padding: 5px;
+          width: 165px;
+          border: none;
+          font-size: 20px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+          -webkit-appearance: button;
+          appearance: button;
+          outline: none;
+        }
+
+        .box select option {
+          padding: 30px;
+        }
+
+        .box button{
+          display: inline-block;
+          outline: 0;
+          cursor: pointer;
+          text-align: center;
+          border: 1px solid #babfc3;
+          padding: 7px 16px;
+          min-height: 36px;
+          min-width: 36px;
+          color: #202223;
+          background: #ffffff;
+          border-radius: 4px;
+          font-weight: 500;
+          font-size: 14px;
+          box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 0px 0px;
+        }
+
+        .box button:hover {
+          background: #77e06e;
+          outline: 1px solid transparent;
+        }
+
+        form {
+          position: relative;
+          z-index: 1;
+        }
+
+        #loading {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 0;
+        }
+
+        #loading h3 {
+          color: #fff;
+        }
+
+        #loading img {
+          display: block;
+          margin: 0 auto;
+        }
+
+        input[type="date"] {
+          background-color: #b3b3b3;
+          color: white;
+          padding: 5px;
+          border: none;
+          font-size: 18px;
+          border-radius: 4px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        button[type="submit"] {
+          display: block;
+          margin-top: 20px;
+          padding: 10px 20px;
+          background-color: #3b8ad9;
+          color: #ffffff;
+          border: none;
+          border-radius: 4px;
+          font-size: 18px;
+          font-weight: bold;
+          cursor: pointer;
+
+    </style>
+    </head>
+
+    <body>
+ <div class="box">
+    <h1>Finance Data - Python Assignment</h1>
+    <form action="/load_data" method="post">
+        <label for="companies">Companies in the config file:</label>
+        {% for company in companies %}
+            <ul id="companies">
+                <li> {{ company }}</li>
+            </ul>
+        {% endfor %}
+        <button onclick="load_data()" type="submit">Download data for all the company</button>
+        <br>
+        <button type="button" onclick="cancel_download()">Cancel Download</button>
+    </form>
+    <div id="loading" style="display:none">
+        <h3>Downloading...</h3>
+    </div>
+
+        {% if message %}
+
+        <p style="color: green;">{{ message }}</p>
+
+        {% endif %}
+
+
+
+
+     <form action="/start_end" method="post">
+
+         <label for="start_date" > Show all companies stock data for a particular day:</label>
+
+         <input type="date" name="start_date" id="start_date">
+         <br>
+         <br>
+         <button type="submit">Show Data</button>
+     </form>
+     <br>
+
+      <form action="/view_data_specific_date" method="post">
+
+         <label for="company1">Select a company:</label>
+
+
+            <select id="company1" name="company1">
+
+                {% for company in companies %}
+
+                <option value="{{ company }}">{{ company }}</option>
+
+                {% endfor %}
+
+            </select>
+         <br>
+
+         <label for="specific_date" > Select the specific date:</label>
+
+         <input type="date" name="specific_date" id="specific_date">
+         <br>
+         <button type="submit">Show all stock data for a particular company for a particular day</button>
+
+
+     </form>
+     <br>
+
+     <form action="/view_data_of_company" method="post">
+
+            <label for="company_name">Select a company:</label>
+
+
+            <select id="company_name" name="company_name">
+
+                {% for company in companies %}
+
+                <option value="{{ company }}">{{ company }}</option>
+
+                {% endfor %}
+
+            </select>
+
+            <button type="submit">Show all stock data for a particular company</button>
+
+        </form>
+
+     <br>
+     <button type="button"><a href="/update_data">Update stock data for a company by date</a></button>
+
+
+
+     </form>
+   </div>
+    <script>
+function load_data() {
+    var xhr = new XMLHttpRequest();
+    var url = "{{ url_for('load_data') }}";
+    xhr.open("POST", url, true);
+
+    // Show the loading screen before sending the request
+    document.getElementById("loading").style.display = "block";
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Hide the loading screen after receiving the response
+            document.getElementById("loading").style.display = "none";
+            var message = xhr.responseText;
+            alert(message);
+        }
+    };
+    xhr.send();
+}
+
+function cancel_download() {
+    document.getElementById("loading").style.display = "none";
+}
+</script>
+    </body>
+</html>
+
+
+

@@ -1,0 +1,71 @@
+<html>
+
+    <head>
+
+        <title>Finance Data</title>
+
+    </head>
+
+    <body>
+
+        <h1>Finance Data</h1>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Company</th>
+
+                    <th>Date</th>
+
+                    <th>Open</th>
+
+                    <th>High</th>
+
+                    <th>Low</th>
+
+                    <th>Close</th>
+
+                    <th>Adj Close</th>
+
+                    <th>Volume</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for row in data_of_company %}
+
+                <tr>
+
+                    <td>{{ row[0] }}</td>
+
+                    <td>{{ row[1] }}</td>
+
+                    <td>{{ row[2] }}</td>
+
+                    <td>{{ row[3] }}</td>
+
+                    <td>{{ row[4] }}</td>
+
+                    <td>{{ row[5] }}</td>
+
+                    <td>{{ row[6] }}</td>
+
+                    <td>{{ row[7] }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </body>
+
+</html>
