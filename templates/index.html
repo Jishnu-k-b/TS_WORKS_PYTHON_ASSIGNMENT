@@ -136,14 +136,14 @@
     <body>
  <div class="box">
     <h1>Finance Data - Python Assignment</h1>
-    <form action="/load_data" method="post">
+    <form action="/download_data" method="post">
         <label for="companies">Companies in the config file:</label>
         {% for company in companies %}
             <ul id="companies">
                 <li> {{ company }}</li>
             </ul>
         {% endfor %}
-        <button onclick="load_data()" type="submit">Download data for all the company</button>
+        <button onclick="download_data()" type="submit">Download data for all the company</button>
         <br>
         <button type="button" onclick="cancel_download()">Cancel Download</button>
     </form>
@@ -224,9 +224,9 @@
      </form>
    </div>
     <script>
-function load_data() {
+function download_data() {
     var xhr = new XMLHttpRequest();
-    var url = "{{ url_for('load_data') }}";
+    var url = "{{ url_for('download_data') }}";
     xhr.open("POST", url, true);
 
     // Show the loading screen before sending the request

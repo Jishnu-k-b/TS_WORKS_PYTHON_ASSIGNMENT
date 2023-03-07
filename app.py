@@ -26,8 +26,8 @@ def index():
     return render_template('index.html', companies=companies)
 
 
-@app.route('/load_data', methods=['POST'])
-def load_data():
+@app.route('/download_data', methods=['POST'])
+def download_data():
     conn = get_conn()
     cursor = conn.cursor()
 
