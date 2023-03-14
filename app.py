@@ -2,8 +2,8 @@ import yfinance as yf
 
 from company_parser import parse
 
-from database import get_conn, insert_data, create_table, get_data_by_company, get_data_by_date_and_company, \
-    get_data_by_start_date, update_database
+from database import get_conn, create_table, get_data_by_company, get_data_by_date_and_company, \
+    get_data_by_start_date, update_database, insert_data
 
 from flask import Flask, render_template, request
 
@@ -24,7 +24,7 @@ def download_data():
     create_table()
     for company in companies:
         data = yf.download(company)
-        insert_data(company, data)
+        insert_data(company,data)
     message = 'Data downloaded for all companies'
     return render_template('index.html', companies=companies, message=message)
 
@@ -62,7 +62,7 @@ def start_end():
         result = get_data_by_start_date(start_date)
 
     if not result:
-        message = 'Data not found for the selected date and company'
+        message = 'No data found on the selected date'
         return render_template('not_found.html', message=message)
     else:
         return render_template('start_end.html', result=result)

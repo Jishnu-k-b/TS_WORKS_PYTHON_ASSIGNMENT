@@ -145,11 +145,14 @@
         {% endfor %}
         <button onclick="download_data()" type="submit">Download data for all the company</button>
         <br>
-        <button type="button" onclick="cancel_download()">Cancel Download</button>
     </form>
+     <br>
+     <br>
     <div id="loading" style="display:none">
-        <h3>Downloading...</h3>
+        <h3 style="color: red;">Downloading...</h3>
     </div>
+     <br>
+     <br>
 
         {% if message %}
 
